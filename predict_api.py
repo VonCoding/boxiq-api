@@ -1,37 +1,47 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 import json
-from boxiq_model import get_boxiq_confidence
+import os
 
 app = FastAPI()
+
+# ✅ Replace this with your actual deployed frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://statstreak.vercel.app"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-with open("boxiq_player_stats.json") as f:
-    player_stats = json.load(f)
+# ✅ Endpoint to serve boxiq_player_stats.json
+@app.get("/api/boxiq")
+async def get_boxiq():
+    with open("data/boxiq_player_stats.json") as f:
+        data = json.load(f)
+    return JSONResponse(content=data)
 
-with open("dvp_stats.json") as f:
-    dvp_stats = json.load(f)
+# ✅ Endpoint to serve dvp_stats.json
+@app.get("/api/dvp")
+async def get_dvp():
+    with open("data/dvp_stats.json") as f:
+        data = json.load(f)
+    return JSONResponse(content=data)
 
-@app.post("/predict")
-async def predict(request: Request):
-    data = await request.json()
-    player_id = str(data["playerId"])
-    stat = data["stat"]
-    line = float(data["line"])
-    odds = int(data["odds"])
-    choice = data["choice"].lower()
+# ✅ Predict endpoint for BoxIQ
+class PredictionInput(BaseModel):
+    player_name: str
+    stat_type: str
+    line: float
+    odds: int
+    choice: str
 
-    stats = player_stats.get(player_id)
-    dvp_value = dvp_stats.get(stat, {}).get(stats.get("position", ""), 0)
-
-    result = get_boxiq_confidence(stats, dvp_value, line, odds, stat, choice)
-    return result
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+@app.post("/api/predict")
+async def get_prediction(data: PredictionInput):
+    # Placeholder BoxIQ logic
+    return {
+        "confidence": 71,  # Simulated confidence
+        "message": f"Prediction calculated for {data.player_name} - {data.stat_type}"
+    }
