@@ -45,3 +45,7 @@ async def get_prediction(data: PredictionInput):
         "confidence": 71,  # Simulated confidence
         "message": f"Prediction calculated for {data.player_name} - {data.stat_type}"
     }
+
+@app.get("/")
+async def root():
+    return {"message": "BoxIQ FastAPI is running"}
