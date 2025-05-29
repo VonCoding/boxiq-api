@@ -12,10 +12,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-with open("data/boxiq_player_stats.json") as f:
+with open("boxiq_player_stats.json") as f:
     player_stats = json.load(f)
 
-with open("data/dvp_stats.json") as f:
+with open("dvp_stats.json") as f:
     dvp_stats = json.load(f)
 
 @app.post("/predict")
