@@ -19,14 +19,14 @@ app.add_middleware(
 # ✅ Endpoint to serve boxiq_player_stats.json
 @app.get("/api/boxiq")
 async def get_boxiq():
-    with open("data/boxiq_player_stats.json") as f:
+    with open("boxiq_player_stats.json") as f:
         data = json.load(f)
     return JSONResponse(content=data)
 
 # ✅ Endpoint to serve dvp_stats.json
 @app.get("/api/dvp")
 async def get_dvp():
-    with open("data/dvp_stats.json") as f:
+    with open("dvp_stats.json") as f:
         data = json.load(f)
     return JSONResponse(content=data)
 
