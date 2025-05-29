@@ -9,7 +9,7 @@ app = FastAPI()
 # Allow frontend access (replace with actual Vercel frontend URL)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["www.statstreak-frontend.vercel.app"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
